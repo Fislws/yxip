@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import os
+import urllib3
+
+# 禁用警告
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 目标URL列表
 urls = [
@@ -23,8 +27,8 @@ unique_ips = set()
 
 for url in urls:
     try:
-        # 发送HTTP请求获取网页内容
-        response = requests.get(url, timeout=5)
+        # 发送HTTP请求获取网页内容（关闭对 SSL/TLS 证书的验证）
+        response = requests.get(url, timeout=5, proxies={"http": None, "https": None}, verify=False)
         
         # 确保请求成功
         if response.status_code == 200:
